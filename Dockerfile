@@ -13,11 +13,13 @@ RUN go mod download
 # Copy the rest of the application code
 COPY . .
 
-# Build the application
-RUN go build -o bot_service ./bot_service/main.go
+# Build the application with explicit output directory and name
+RUN mkdir -p /app/bin && \
+  go build -o /app/bin/bot_service ./bot_service/main.go && \
+  chmod +x /app/bin/bot_service
 
 # Expose the port for the health check server
 EXPOSE 8080
 
 # Command to run the bot
-CMD ["./bot_service"] 
+CMD ["/app/bin/bot_service"]
